@@ -1,0 +1,2 @@
+Juan,Pérez,juan.perez@example.com,clave123,administrador
+Maria,Gómez,maria.gomez@example.com,clave456,cliente
