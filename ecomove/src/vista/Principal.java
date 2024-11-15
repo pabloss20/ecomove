@@ -14,11 +14,11 @@ public class Principal extends JFrame {
 
     @SuppressWarnings("unused")
     public Principal() {
-        // Configuración de la ventana principal
+
         setTitle("Ventana Principal");
         setSize(300, 250);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);  // Centrar la ventana
+        setLocationRelativeTo(null); 
 
         btnServidor = new JButton("Servidor");
         btnCliente = new JButton("Cliente");
@@ -43,13 +43,13 @@ public class Principal extends JFrame {
         });
 
         btnAdministrador.addActionListener((ActionEvent e) -> {
-            // Acción para el botón de Administrador
-            System.out.println("Administrador clickeado");
-            // Deshabilitar el botón de administrador
+
             btnAdministrador.setEnabled(false);
+
+            AdministradorGUI administradorGUI = new AdministradorGUI();
+            administradorGUI.setVisible(true);
         });
 
-        // Añadir los botones a la ventana
         setLayout(null);
         btnServidor.setBounds(50, 30, 200, 30);
         btnCliente.setBounds(50, 70, 200, 30);
@@ -61,7 +61,7 @@ public class Principal extends JFrame {
     }
 
     public static void main(String[] args) {
-        // Mostrar la ventana principal
+
         SwingUtilities.invokeLater(() -> {
             new Principal().setVisible(true);
         });

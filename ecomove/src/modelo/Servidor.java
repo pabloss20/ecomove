@@ -1,29 +1,22 @@
 package modelo;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Servidor implements Runnable {
 
     private ServerSocket server;
-    private Socket sc;
     private final int puerto;
-    private final PropertyChangeSupport support;
+    private final List<Asistente> clientes; 
 
-    // Constructor
     public Servidor(int puerto) {
         this.puerto = puerto;
-        this.support = new PropertyChangeSupport(this);  // Inicialización del soporte para cambios
-    }
-
-    // Agregar un listener para las notificaciones
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        support.addPropertyChangeListener(listener);
+        this.clientes = new ArrayList<>(); 
     }
 
     @Override
@@ -33,9 +26,14 @@ public class Servidor implements Runnable {
             server = new ServerSocket(puerto);
 
             while (true) {
-                sc = server.accept();
+                Socket sc = server.accept();
                 System.out.println("NUEVO CLIENTE CONECTADO");
+
                 Asistente asistente = new Asistente(sc, this);
+                synchronized (clientes) {
+                    clientes.add(asistente); 
+                }
+                
                 Thread t = new Thread(asistente);
                 t.start();
             }
@@ -46,11 +44,23 @@ public class Servidor implements Runnable {
     }
 
     /**
-     * Notificar a los observadores cuando haya un mensaje
+     * Método para enviar un mensaje a todos los clientes conectados
      * @param mensaje Mensaje a enviar
      */
-    public void notificacion(String mensaje) {
-        support.firePropertyChange("mensaje", null, mensaje + "\n");  // Notificar el cambio
-        System.out.println(mensaje);
+    public void enviarATodos(String mensaje) {
+        synchronized (clientes) {
+            for (Asistente asistente : clientes) {
+                asistente.enviarMensaje(mensaje); // Llamada al método enviarMensaje de cada Asistente
+            }
+        }
+    }
+    
+    /**
+     * Método para eliminar un cliente de la lista cuando se desconecta
+     */
+    public void eliminarCliente(Asistente asistente) {
+        synchronized (clientes) {
+            clientes.remove(asistente);
+        }
     }
 }

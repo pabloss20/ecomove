@@ -1,8 +1,14 @@
 package vista;
 
+import java.io.DataInputStream;
+import java.io.IOException;
 import javax.swing.*;
+import modelo.Administrador;
+import modelo.Registro;
 
 public class AdministradorGUI extends JFrame {
+
+    private Administrador administrador;
 
     private final JTextField txtNombre;
     private final JTextField txtMensaje;
@@ -13,11 +19,10 @@ public class AdministradorGUI extends JFrame {
     @SuppressWarnings("unused")
     public AdministradorGUI() {
         // Configuración de la ventana
-        setTitle("Cliente");
+        setTitle("Administrador");
         setSize(400, 300);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         
-        // Crear componentes
         txtNombre = new JTextField();
         txtMensaje = new JTextField();
         txtConversacion = new JTextArea();
@@ -25,13 +30,10 @@ public class AdministradorGUI extends JFrame {
         btnEnviar = new JButton("Enviar");
         btnSalir = new JButton("Salir");
         
-        // Configurar área de texto de conversación
         txtConversacion.setEditable(false);
         
-        // Configuración del layout
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-        
-        // Añadir los componentes a la ventana
+
         add(new JLabel("Nombre de usuario"));
         add(txtNombre);
         add(btnEmpezar);
@@ -39,49 +41,63 @@ public class AdministradorGUI extends JFrame {
         add(txtMensaje);
         add(btnEnviar);
         add(btnSalir);
-        
-        // Configurar visibilidad de los botones y campos
+
         btnEnviar.setEnabled(false);
         txtMensaje.setEnabled(false);
         btnSalir.setEnabled(false);
         
-        // Acción de "Empezar"
         btnEmpezar.addActionListener(e -> empezar());
-        
-        // Acción de "Enviar"
+
         btnEnviar.addActionListener(e -> enviarMensaje());
-        
-        // Acción de "Salir"
+
         btnSalir.addActionListener(e -> salir());
     }
     
-    // Método para iniciar la interacción con el cliente
     private void empezar() {
         nombre = txtNombre.getText();
         if (!nombre.isEmpty()) {
+            
+            administrador = new Administrador("Juan", "Sanchez", "jpxd@gmail.com", "12345678");
+            Registro.registrarUsuario("Juan", "Sanchez", "jpxd@gmail.com", "12345678", "administrador");
+
             txtMensaje.setEnabled(true);
             btnEnviar.setEnabled(true);
             btnSalir.setEnabled(true);
             txtNombre.setEnabled(false);
             btnEmpezar.setEnabled(false);
+
+            recibirMensajes();
         }
     }
-    
-    // Método para enviar un mensaje
+
     private void enviarMensaje() {
         String mensaje = txtMensaje.getText();
         txtConversacion.append(nombre + ": " + mensaje + "\n");
         txtMensaje.setText("");
+        administrador.enviarMensaje(mensaje);
     }
-    
-    // Método para cerrar la ventana
+
     private void salir() {
         System.exit(0);
+    }   
+
+    public void recibirMensajes() {
+        new Thread(() -> {
+            try {
+                DataInputStream in = new DataInputStream(administrador.getSocket().getInputStream());
+                while (true) {
+                    String mensaje = in.readUTF();
+                    txtConversacion.append("Otro: " + mensaje + "\n");
+                }
+            } catch (IOException ex) {
+                
+            }
+        }).start();
     }
     
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            new AdministradorGUI().setVisible(true);
+            new ClienteGUI().setVisible(true);
         });
     }
 }
