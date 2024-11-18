@@ -9,9 +9,20 @@ public class Test
         
         // Intento de iniciar sesión
         Usuario usuario = Registro.iniciarSesion("juan.perez@example.com", "clave123");
-        if (usuario != null) {
-            System.out.println("Inicio de sesión exitoso.");
-            System.out.println(usuario.getNombre());
+        if (usuario != null) 
+        {
+            if (usuario instanceof Cliente) 
+            {
+                System.out.println("Inicio de sesión exitoso.");
+                System.out.println(usuario.getNombre());
+                System.out.println("Cliente");
+            }
+            else if (usuario instanceof Administrador)
+            {
+                System.out.println("Inicio de sesión exitoso.");
+                System.out.println(usuario.getNombre());
+                System.out.println("Administrador");
+            }
         } else {
             System.out.println("Usuario o contraseña incorrectos.");
         }

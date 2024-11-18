@@ -71,8 +71,8 @@ public class ClienteGUI extends JFrame {
     }
     
     private void enviarMensaje() {
-        String mensaje = txtMensaje.getText();
-        txtConversacion.append(nombre + ": " + mensaje + "\n");
+        String mensaje = nombre+": " + txtMensaje.getText();
+        txtConversacion.append(mensaje + "\n");
         txtMensaje.setText("");
         cliente.enviarMensaje(mensaje);
     }
@@ -87,7 +87,7 @@ public class ClienteGUI extends JFrame {
                 DataInputStream in = new DataInputStream(cliente.getSocket().getInputStream());
                 while (true) {
                     String mensaje = in.readUTF();
-                    txtConversacion.append("Otro: " + mensaje + "\n");
+                    txtConversacion.append(mensaje + "\n");
                 }
             } catch (IOException ex) {
                 

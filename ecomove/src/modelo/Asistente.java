@@ -42,7 +42,7 @@ public class Asistente implements Runnable {
                     in.close();
                     sc.close();
                 } else {
-                    server.enviarATodos(mensaje);
+                    server.enviarATodos(mensaje, this);
                 }
             }
 

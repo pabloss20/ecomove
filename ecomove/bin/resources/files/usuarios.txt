@@ -1,7 +1,4 @@
 Juan,Pérez,juan.perez@example.com,clave123,administrador
 Maria,Gómez,maria.gomez@example.com,clave456,cliente
 Pablo,Sanchez,jp12@gmail.com,12345678,cliente
-Pablo,Sanchez,jp12@gmail.com,12345678,cliente
-Juan,Sanchez,jpxd@gmail.com,12345678,administrador
-Pablo,Sanchez,jp12@gmail.com,12345678,cliente
 Juan,Sanchez,jpxd@gmail.com,12345678,administrador

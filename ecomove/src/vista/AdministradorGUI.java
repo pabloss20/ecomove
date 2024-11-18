@@ -71,8 +71,8 @@ public class AdministradorGUI extends JFrame {
     }
 
     private void enviarMensaje() {
-        String mensaje = txtMensaje.getText();
-        txtConversacion.append(nombre + ": " + mensaje + "\n");
+        String mensaje = nombre + ": " + txtMensaje.getText();
+        txtConversacion.append(mensaje + "\n");
         txtMensaje.setText("");
         administrador.enviarMensaje(mensaje);
     }
@@ -87,7 +87,7 @@ public class AdministradorGUI extends JFrame {
                 DataInputStream in = new DataInputStream(administrador.getSocket().getInputStream());
                 while (true) {
                     String mensaje = in.readUTF();
-                    txtConversacion.append("Otro: " + mensaje + "\n");
+                    txtConversacion.append(mensaje + "\n");
                 }
             } catch (IOException ex) {
                 

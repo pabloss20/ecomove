@@ -47,13 +47,15 @@ public class Servidor implements Runnable {
      * Método para enviar un mensaje a todos los clientes conectados
      * @param mensaje Mensaje a enviar
      */
-    public void enviarATodos(String mensaje) {
+    public void enviarATodos(String mensaje, Asistente emisor) {
         synchronized (clientes) {
             for (Asistente asistente : clientes) {
-                asistente.enviarMensaje(mensaje); // Llamada al método enviarMensaje de cada Asistente
+                if (asistente != emisor) { // No enviar al cliente que lo envió
+                    asistente.enviarMensaje(mensaje);
+                }
             }
         }
-    }
+    }    
     
     /**
      * Método para eliminar un cliente de la lista cuando se desconecta
