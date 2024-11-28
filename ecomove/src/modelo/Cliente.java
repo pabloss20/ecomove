@@ -14,5 +14,4 @@ public class Cliente extends Usuario
     }
 
     public int getPuntos(){return puntos;}
-
 }
